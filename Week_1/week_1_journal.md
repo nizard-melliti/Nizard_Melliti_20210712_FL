@@ -21,3 +21,11 @@ Here is my program architecture:
  As my class for units/tens/hundreds/thousands representation use the same logic, I think that I have to create an interface to have an abstract 
  representation as we have the same methods. This is my goal for tomorrow.
 My fear is that now I have to rewrite tomorrow 350 lines of code before starting coding....
+
+
+14/07/2021 :
+I have created an abstraction about units/tens/hundreds/thousands representation with an interface YIF_NUMBER_REPRESENTATION. 
+I think that I can use the same logic for the converter to roman and the converter to arabic as we have the same pattern.
+Tommorrow I will create an interface YIF_NUMBER_CONVERTER and this interface will be used by the converter to roman and the converter to arabic.
+I really want to finish this exercice and I think that I need to spend more than 50 minutes coding by day as every day we have to start from zero line of codes...
+About 30 minutes was dedicated to rewrite everything....

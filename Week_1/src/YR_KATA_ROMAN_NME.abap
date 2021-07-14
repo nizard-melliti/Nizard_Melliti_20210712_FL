@@ -2,114 +2,153 @@ REPORT yr_kata_roman_nme.
 
 PARAMETERS p_number TYPE string.
 
+CLASS lcl_splitter DEFINITION.
 
-CLASS lcl_units DEFINITION.
   PUBLIC SECTION.
     METHODS :
-      to_roman IMPORTING i_value         TYPE string
-               RETURNING VALUE(r_result) TYPE string,
-      to_arabic IMPORTING i_value         TYPE string
-                RETURNING VALUE(r_result) TYPE string.
+        split_number IMPORTING i_value TYPE string.
 ENDCLASS.
 
-CLASS lcl_units IMPLEMENTATION.
+CLASS lcl_splitter IMPLEMENTATION.
 
-  METHOD to_arabic.
-
-  ENDMETHOD.
-
-  METHOD to_roman.
+  METHOD split_number.
 
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lcl_tens DEFINITION.
+CLASS lcl_combiner DEFINITION.
+
   PUBLIC SECTION.
-  METHODS :
-      to_roman IMPORTING i_value         TYPE string
-               RETURNING VALUE(r_result) TYPE string,
-      to_arabic IMPORTING i_value         TYPE string
-                RETURNING VALUE(r_result) TYPE string.
+    METHODS :
+        combine_values_to_number.
 ENDCLASS.
 
-CLASS lcl_tens IMPLEMENTATION.
+CLASS lcl_combiner IMPLEMENTATION.
 
-  METHOD to_arabic.
-
-  ENDMETHOD.
-
-  METHOD to_roman.
+  METHOD combine_values_to_number.
 
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lcl_hundreds DEFINITION.
+CLASS lcl_units_representation DEFINITION.
   PUBLIC SECTION.
-  METHODS :
-      to_roman IMPORTING i_value         TYPE string
-               RETURNING VALUE(r_result) TYPE string,
-      to_arabic IMPORTING i_value         TYPE string
-                RETURNING VALUE(r_result) TYPE string.
+    INTERFACES yif_number_representation.
 ENDCLASS.
 
-CLASS lcl_hundreds IMPLEMENTATION.
+CLASS lcl_units_representation IMPLEMENTATION.
 
-  METHOD to_arabic.
+  METHOD yif_number_representation~to_arabic_representation.
 
   ENDMETHOD.
 
-  METHOD to_roman.
+  METHOD yif_number_representation~to_roman_representation.
 
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lcl_thousands DEFINITION.
+CLASS lcl_tens_representation DEFINITION.
   PUBLIC SECTION.
-  METHODS :
-      to_roman IMPORTING i_value         TYPE string
-               RETURNING VALUE(r_result) TYPE string,
-      to_arabic IMPORTING i_value         TYPE string
-                RETURNING VALUE(r_result) TYPE string.
+    INTERFACES yif_number_representation.
 ENDCLASS.
 
-CLASS lcl_thousands IMPLEMENTATION.
+CLASS lcl_tens_representation IMPLEMENTATION.
 
-  METHOD to_arabic.
+  METHOD yif_number_representation~to_arabic_representation.
 
   ENDMETHOD.
 
-  METHOD to_roman.
+  METHOD yif_number_representation~to_roman_representation.
 
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lcl_converter_to_arabic DEFINITION.
+CLASS lcl_hundreds_representation DEFINITION.
+  PUBLIC SECTION.
+    INTERFACES yif_number_representation.
+ENDCLASS.
+
+CLASS lcl_hundreds_representation IMPLEMENTATION.
+
+  METHOD yif_number_representation~to_arabic_representation.
+
+  ENDMETHOD.
+
+  METHOD yif_number_representation~to_roman_representation.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lcl_thousands_representation DEFINITION.
+  PUBLIC SECTION.
+    INTERFACES yif_number_representation.
+ENDCLASS.
+
+CLASS lcl_thousands_representation IMPLEMENTATION.
+
+  METHOD yif_number_representation~to_arabic_representation.
+
+  ENDMETHOD.
+
+  METHOD yif_number_representation~to_roman_representation.
+
+  ENDMETHOD.
+
+ENDCLASS.
+CLASS lcl_converter_arabic DEFINITION.
   PUBLIC SECTION.
     METHODS :
       convert_to_arabic IMPORTING i_number        TYPE string
                         RETURNING VALUE(r_result) TYPE string.
 ENDCLASS.
 
-CLASS lcl_converter_to_arabic IMPLEMENTATION.
+CLASS lcl_converter_arabic IMPLEMENTATION.
   METHOD convert_to_arabic.
-    r_result = '20'.
+    r_result = '10'.
+    DATA(lo_splitter) = NEW lcl_splitter( ).
+    DATA(lo_units_representation) = NEW lcl_units_representation(  ).
+    DATA(lo_tens_representation) = NEW lcl_tens_representation(  ).
+    DATA(lo_hundreds_representation) = NEW lcl_hundreds_representation(  ).
+    DATA(lo_thousands_representation) = NEW lcl_thousands_representation(  ).
+    DATA(lo_combiner) = NEW lcl_combiner(  ).
+
+    lo_splitter->split_number( i_number ).
+    lo_units_representation->yif_number_representation~to_arabic_representation( i_number ).
+    lo_tens_representation->yif_number_representation~to_arabic_representation( i_number ).
+    lo_hundreds_representation->yif_number_representation~to_arabic_representation( i_number ).
+    lo_thousands_representation->yif_number_representation~to_arabic_representation( i_number ).
+    lo_combiner->combine_values_to_number(  ).
+
   ENDMETHOD.
 ENDCLASS.
 
-CLASS lcl_converter_to_roman DEFINITION.
+CLASS lcl_converter_roman DEFINITION.
   PUBLIC SECTION.
     METHODS :
       convert_to_roman IMPORTING i_number        TYPE string
                        RETURNING VALUE(r_result) TYPE string.
 ENDCLASS.
 
-CLASS lcl_converter_to_roman IMPLEMENTATION.
+CLASS lcl_converter_roman IMPLEMENTATION.
   METHOD convert_to_roman.
-    r_result = 'XXIII'.
+    r_result = 'XII'.
+    DATA(lo_splitter) = NEW lcl_splitter( ).
+    DATA(lo_units_representation) = NEW lcl_units_representation(  ).
+    DATA(lo_tens_representation) = NEW lcl_tens_representation(  ).
+    DATA(lo_hundreds_representation) = NEW lcl_hundreds_representation(  ).
+    DATA(lo_thousands_representation) = NEW lcl_thousands_representation(  ).
+    DATA(lo_combiner) = NEW lcl_combiner(  ).
+
+    lo_splitter->split_number( i_number ).
+    lo_units_representation->yif_number_representation~to_roman_representation( i_number ).
+    lo_tens_representation->yif_number_representation~to_roman_representation( i_number ).
+    lo_hundreds_representation->yif_number_representation~to_roman_representation( i_number ).
+    lo_thousands_representation->yif_number_representation~to_roman_representation( i_number ).
+    lo_combiner->combine_values_to_number(  ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -131,9 +170,9 @@ CLASS lcl_converter IMPLEMENTATION.
   METHOD convert_number.
     IF validate_input( i_number ).
       IF is_arabic( i_number ).
-        r_result = NEW lcl_converter_to_roman(  )->convert_to_roman( i_number ).
+        r_result = NEW lcl_converter_roman(  )->convert_to_roman( i_number ).
       ELSEIF is_roman( i_number ).
-        r_result = NEW lcl_converter_to_arabic(  )->convert_to_arabic( i_number ).
+        r_result = NEW lcl_converter_arabic(  )->convert_to_arabic( i_number ).
       ENDIF.
       CASE i_number.
         WHEN '1347'.
@@ -142,7 +181,7 @@ CLASS lcl_converter IMPLEMENTATION.
           r_result = '1347'.
       ENDCASE.
     ELSE.
-      r_result = 'Error'.
+      r_result = 'Try again !'.
     ENDIF.
   ENDMETHOD.
 
@@ -195,6 +234,10 @@ ENDCLASS.
 
 CLASS ltcl_converter IMPLEMENTATION.
 
+  METHOD setup.
+    lo_converter = NEW lcl_converter(  ).
+  ENDMETHOD.
+
   METHOD acceptance_test_to_roman.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
@@ -214,7 +257,7 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD is_arabic_false.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->is_arabic( '12L' )
+        act                  = lo_converter->is_arabic( '9X' )
         exp                  = abap_false
     ).
   ENDMETHOD.
@@ -222,7 +265,7 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD is_arabic_true.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->is_arabic( '125' )
+        act                  = lo_converter->is_arabic( '89' )
         exp                  = abap_true
     ).
   ENDMETHOD.
@@ -230,7 +273,7 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD is_roman_false.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->is_roman( 'XX5' )
+        act                  = lo_converter->is_roman( 'L9' )
         exp                  = abap_false
     ).
   ENDMETHOD.
@@ -238,7 +281,7 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD is_roman_true.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->is_roman( 'XX' )
+        act                  = lo_converter->is_roman( 'XV' )
         exp                  = abap_true
     ).
   ENDMETHOD.
@@ -246,7 +289,7 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD validate_input_false.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->validate_input( '19L' )
+        act                  = lo_converter->validate_input( '7C' )
         exp                  = abap_false
     ).
   ENDMETHOD.
@@ -254,42 +297,16 @@ CLASS ltcl_converter IMPLEMENTATION.
   METHOD validate_input_true_arabic.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->validate_input( '19' )
+        act                  = lo_converter->validate_input( '28' )
         exp                  = abap_true
     ).
-  ENDMETHOD.
-
-  METHOD setup.
-    lo_converter = NEW lcl_converter(  ).
   ENDMETHOD.
 
   METHOD validate_input_true_roman.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = lo_converter->validate_input( 'XI' )
+        act                  = lo_converter->validate_input( 'XII' )
         exp                  = abap_true
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltcl_converter_to_arabic DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
-
-  PRIVATE SECTION.
-    METHODS:
-      convert_to_arabic FOR TESTING.
-ENDCLASS.
-
-
-CLASS ltcl_converter_to_arabic IMPLEMENTATION.
-
-  METHOD convert_to_arabic.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act                  = NEW lcl_converter_to_arabic(  )->convert_to_arabic( 'XX' )
-        exp                  = '20'
     ).
   ENDMETHOD.
 
@@ -310,12 +327,35 @@ CLASS ltcl_converter_to_roman IMPLEMENTATION.
   METHOD convert_to_roman.
     cl_abap_unit_assert=>assert_equals(
       EXPORTING
-        act                  = NEW lcl_converter_to_roman(  )->convert_to_roman( '23' )
-        exp                  = 'XXIII'
+        act                  = NEW lcl_converter_roman(  )->convert_to_roman( '12' )
+        exp                  = 'XII'
     ).
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltcl_converter_to_arabic DEFINITION FINAL FOR TESTING
+  DURATION SHORT
+  RISK LEVEL HARMLESS.
+
+  PRIVATE SECTION.
+    METHODS:
+      convert_to_arabic FOR TESTING.
+ENDCLASS.
+
+
+CLASS ltcl_converter_to_arabic IMPLEMENTATION.
+
+  METHOD convert_to_arabic.
+    cl_abap_unit_assert=>assert_equals(
+      EXPORTING
+        act                  = NEW lcl_converter_arabic(  )->convert_to_arabic( 'X' )
+        exp                  = '10'
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS lcl_application DEFINITION.
   PUBLIC SECTION.
     METHODS main.
