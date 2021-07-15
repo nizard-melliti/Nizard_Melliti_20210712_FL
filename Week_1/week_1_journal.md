@@ -29,3 +29,13 @@ I think that I can use the same logic for the converter to roman and the convert
 Tommorrow I will create an interface YIF_NUMBER_CONVERTER and this interface will be used by the converter to roman and the converter to arabic.
 I really want to finish this exercice and I think that I need to spend more than 50 minutes coding by day as every day we have to start from zero line of codes...
 About 30 minutes was dedicated to rewrite everything....
+
+
+15/07/2021:
+Here is my 50 minutes coding : 
+Today I decided to focus on the roman converter and arabic converter. They use the splitter and the combiner. 
+I created a class lcl_number_representation with 4 attributes : units/tens/hundreds/thousands representation
+The splitter will return the object lcl_number_representation
+The combiner will use the object lcl_number_representation to concatenate units/tens/hundreds/thousands converted values.
+I have a problem with the input parameter. I loose the value splitted to be converted at a moment so I need to have a reflexion tomorrow to refactor my coding 
+and resolve the issue without loosing the value to convert.
