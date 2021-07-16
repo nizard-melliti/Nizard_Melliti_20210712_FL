@@ -39,3 +39,13 @@ The splitter will return the object lcl_number_representation
 The combiner will use the object lcl_number_representation to concatenate units/tens/hundreds/thousands converted values.
 I have a problem with the input parameter. I loose the value splitted to be converted at a moment so I need to have a reflexion tomorrow to refactor my coding 
 and resolve the issue without loosing the value to convert.
+
+
+16/07/2021
+Today I resolve my yesterday issues when I loose at a moment some input parameters so I decided to store (attributes) the value to be converted 
+into the class that represents units/tens/hundreds/thousands. I follow my architecture of yesterday but I didn't have enough time 
+to rewrite my ABAP Unit Test and to finish my coding of the highest level but I confirm that I wanted to follow what I've done the day 2. 
+I also didn't have enough time  to implements the enhancement to let the user specify a text file containing a number to convert on each line.
+I wanted to do it in 2 steps : first step with only input parameter and 2nd step the enhancement with the text file. Why ?
+Because I wanted to check if my architecture will respect the Open/Closed Principle. 
+And if not to work on it to allow my program to respect the Open/Closed Principle. But 50 minutes of coding per day is not enough...
