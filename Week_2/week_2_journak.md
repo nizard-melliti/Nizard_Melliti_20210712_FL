@@ -18,3 +18,9 @@ Here is the explanation of my first architecture :
  This will surely highlight errors in my architecture. 
  
  
+20/07/2021 :
+I started by writing unit test. At the begining I was confused as the cell state are generate randomly 
+but with some search I found that we can use assert_number_between to ensure that the number generated is between the bound.
+The difference with yesterday is that while writing my unit tests I realized that my cell and state classes were not testable. 
+I had to create methods to return the state of the cell. These methods return a value and are therefore testable.
+ 
