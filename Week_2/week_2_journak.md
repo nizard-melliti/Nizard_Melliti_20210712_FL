@@ -30,8 +30,11 @@ I changed my approach about the random generator. In the old version of my rando
 This has brought some changes especially in the Cell object at the initialization of a cell.  
 During my next session I will build on this architecture with the TDD methodology. 
 
-
 22/07/2021 : 
 I used the TDD approach. With my version of the generator that returns a random state object I am stuck for the unit test. 
 Either my code is not testable because it returns a random object, or I'm testing the wrong thing.
 For the next session I will have to find a way to test my state generation class differently.
+
+23/07/2021 :
+It is very complicated to test classes and methods that return random values. I had to create a get_state method which returns the state's value.
+This method doesn't fit the Tell Don't Ask principle. It is only used to test if what I am building randomly is what is expected.

@@ -9,6 +9,7 @@ CLASS lcl_state DEFINITION.
 
     METHODS :
       constructor IMPORTING i_state TYPE i,
+      get_state RETURNING VALUE(r_state) TYPE i,
       is_none RETURNING VALUE(r_bool) TYPE abap_bool,
       is_alive RETURNING VALUE(r_bool) TYPE abap_bool,
       is_died RETURNING VALUE(r_bool) TYPE abap_bool.
@@ -23,6 +24,10 @@ CLASS lcl_state IMPLEMENTATION.
     state = i_state.
   ENDMETHOD.
 
+  METHOD get_state.
+    r_state = state.
+  ENDMETHOD.
+
   METHOD is_none.
     IF state = lcl_state=>none.
       r_bool = abap_true.
@@ -31,19 +36,18 @@ CLASS lcl_state IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+  METHOD is_died.
+    IF state = lcl_state=>died.
+      r_bool = abap_true.
+    ELSEIF state <> lcl_state=>died.
+      r_bool = abap_false.
+    ENDIF.
+  ENDMETHOD.
 
   METHOD is_alive.
     IF state = lcl_state=>alive.
       r_bool = abap_true.
     ELSEIF state <> lcl_state=>alive.
-      r_bool = abap_false.
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD is_died.
-    IF state = lcl_state=>died.
-      r_bool = abap_true.
-    ELSEIF state <> lcl_state=>died.
       r_bool = abap_false.
     ENDIF.
   ENDMETHOD.
@@ -67,6 +71,7 @@ CLASS lcl_cell DEFINITION.
   PUBLIC SECTION.
     METHODS :
       constructor,
+      get_state RETURNING VALUE(r_state) TYPE i,
       is_none RETURNING VALUE(r_bool) TYPE abap_bool,
       is_alive RETURNING VALUE(r_bool) TYPE abap_bool,
       is_died RETURNING VALUE(r_bool) TYPE abap_bool.
@@ -82,6 +87,10 @@ CLASS lcl_cell IMPLEMENTATION.
     state = NEW lcl_cell_generator(  )->generate_state_cell(  ).
   ENDMETHOD.
 
+  METHOD get_state.
+    r_state = state->get_state(  ).
+  ENDMETHOD.
+
   METHOD is_none.
     r_bool = state->is_none(  ).
   ENDMETHOD.
@@ -95,6 +104,27 @@ CLASS lcl_cell IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+class ltcl_cell definition final for testing
+  duration short
+  risk level harmless.
+
+  PRIVATE SECTION.
+    METHODS:
+      cell_state FOR TESTING.
+  ENDCLASS.
+
+
+class ltcl_cell implementation.
+
+  method cell_state.
+    cl_abap_unit_assert=>assert_number_between(
+      lower  = lcl_state=>none
+      upper  = lcl_state=>died
+      number = NEW lcl_cell(  )->get_state(  ) ).
+  endmethod.
+
+endclass.
 
 CLASS ltcl_state DEFINITION FINAL FOR TESTING
   DURATION SHORT
@@ -153,18 +183,14 @@ CLASS ltcl_cell_generator DEFINITION FINAL FOR TESTING
       generate_state_cell FOR TESTING.
 ENDCLASS.
 
-
 CLASS ltcl_cell_generator IMPLEMENTATION.
 
   METHOD generate_state_cell.
 
-    TYPES tyt_state TYPE STANDARD TABLE OF REF TO lcl_state WITH NON-UNIQUE KEY table_line.
-    DATA(dref) = NEW tyt_state( ( NEW lcl_state( 0 ) ) ( NEW lcl_state( 1 ) ) ( NEW lcl_state( 2 ) ) ).
-    ASSIGN dref->* TO FIELD-SYMBOL(<itab>).
-
-    cl_abap_unit_assert=>assert_table_contains(
-      line  = NEW lcl_cell_generator(  )->generate_state_cell(  )
-      table = <itab> ).
+    cl_abap_unit_assert=>assert_number_between(
+      lower  = lcl_state=>none
+      upper  = lcl_state=>died
+      number = NEW lcl_cell_generator(  )->generate_state_cell(  )->get_state(  ) ).
 
   ENDMETHOD.
 
