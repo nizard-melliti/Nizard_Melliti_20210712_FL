@@ -23,4 +23,9 @@ I started by writing unit test. At the begining I was confused as the cell state
 but with some search I found that we can use assert_number_between to ensure that the number generated is between the bound.
 The difference with yesterday is that while writing my unit tests I realized that my cell and state classes were not testable. 
 I had to create methods to return the state of the cell. These methods return a value and are therefore testable.
- 
+
+
+21/07/2021 : 
+I changed my approach about the random generator. In the old version of my random generator, I used Integers, whereas I think that using the State object is more appropriate (everything is an object).
+This has brought some changes especially in the Cell object at the initialization of a cell.  
+During my next session I will build on this architecture with the TDD methodology. 
