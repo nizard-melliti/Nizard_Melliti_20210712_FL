@@ -10,3 +10,8 @@ I hadn't enough time to create the square objects but tomorrow I'm going to star
 04/08/2021 : 
 I kept the same approach than yesterday and I had enough time to add the class Square with the test. 
 Tomorrow to have engouh time to build my snake ladders class I will bypass the unit test for the class Dice and Square.
+
+
+05/08/2021 : 
+I have to create now the Snakes and Ladders class.
+
