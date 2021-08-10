@@ -15,3 +15,7 @@ Tomorrow to have engouh time to build my snake ladders class I will bypass the u
 05/08/2021 : 
 I have to create now the Snakes and Ladders class.
 
+06/08/2021 : 
+I didn't have time to add the objects Snakes and Ladders. I just had time to rewrite my code from yesterday and add a unit test.
+I'm quite proud of the approach I've taken to the game .
+
