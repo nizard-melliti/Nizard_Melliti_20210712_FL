@@ -6,3 +6,7 @@ I think I can do much better by creating objects for dice and squares.
 
 03/08/2021 :
 I hadn't enough time to create the square objects but tomorrow I'm going to start from scratch but keep the same approach.
+
+04/08/2021 : 
+I kept the same approach than yesterday and I had enough time to add the class Square with the test. 
+Tomorrow to have engouh time to build my snake ladders class I will bypass the unit test for the class Dice and Square.
